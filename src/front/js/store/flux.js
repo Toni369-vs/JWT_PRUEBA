@@ -11,6 +11,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				token: localStorage.getItem("token"), 
 			},
 
+			logged: true,
 
 			message: null,
 			demo: [
@@ -117,27 +118,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// FUNCION PARA VALIDAR TOKEN
 
-			// validToken: async () => {
-			// 	const token = localStorage.getItem("token");
+			validToken: async () => {
+				const token = localStorage.getItem("token");
 
-			// 	try {
-			// 		//codigo exitoso
-			// 		let data = await axios.get("https://literate-space-succotash-v44q57gvx5wf7v-3001.app.github.dev/api/validToken",{
-			// 			headers:{
-			// 				"Authorization": `Bearer ${token}`,
-			// 			}
-			// 		})
-			// 		console.log(data);
-			// 		setStore({logged:true})
-			// 		return true;
+				try {
+					//codigo exitoso
+					let data = await axios.get("https://literate-space-succotash-v44q57gvx5wf7v-3001.app.github.dev/api/validToken",{
+						headers:{
+							"Authorization": `Bearer ${token}`,
+						}
+					})
 
-			// 	} catch (error) {
-			// 		//manejar los errrores
-			// 		console.log(error);
-			// 		setStore({logged:false})
-			// 		return false;
-			// 	}
-			// },
+					setStore({logged:true})
+					return true;
+
+				} catch (error) {
+					//manejar los errrores
+					console.log(error);
+					setStore({logged:false})
+					return false;
+				}
+			},
 
 
 

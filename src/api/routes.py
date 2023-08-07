@@ -10,7 +10,6 @@ from flask_jwt_extended import jwt_required
 api = Blueprint('api', __name__)
 
 
-
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
 
@@ -21,6 +20,7 @@ def handle_hello():
     return jsonify(response_body), 200
 
     # ENDPOINT PARA LOGIN
+
 
 @api.route("/login", methods=["POST"])
 def login():
@@ -37,8 +37,8 @@ def login():
 
 # ENDPOINTS PARA CREACIÓN DE USUARIO
 
-@api.route('/user', methods=['POST'])
 
+@api.route('/user', methods=['POST'])
 def create_user():
     request_body = request.get_json(force=True)
     if 'email' not in request_body or 'password' not in request_body:
@@ -49,7 +49,8 @@ def create_user():
     if existing_user:
         return jsonify({"error": "User with this email already exists"}), 409
 
-    user = User(email=request_body['email'], password=request_body['password'], is_active = True)
+    user = User(email=request_body['email'],
+                password=request_body['password'], is_active=True)
 
     db.session.add(user)
     db.session.commit()
@@ -63,32 +64,31 @@ def create_user():
     return response, 200
 
 # ENDPOINT DE VALIDACIÓN
+
+
 @api.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
-    
+
     current_user = get_jwt_identity()
     user = User.query.filter_by(email=current_user).first()
 
     response_body = {
         "logged_in_as": current_user,
         "user": user.serialize()
-        }
-    
+    }
+
     return jsonify(logged_in_as=response_body), 200
 
 
 # ENDPOINT PARA VALIDAR TOKEN
 
-# @api.route("/validToken", methods=["GET"])
-# @jwt_required()
-# def protected():
-#     current_user = get_jwt_identity()
-#     print.log(current_user)
-
-#     response_body = {
-#         "logged_in_as": current_user.serialize()
-#     }
-#     print.log(response_body)
-
-#     return jsonify(response_body), 200
+@api.route("/validToken", methods=["GET"])
+@jwt_required()
+def get_profile():
+    # Access the identity of the current user with get_jwt_identity
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+    if user:
+        return jsonify(True), 200
+    return jsonify(False), 403
