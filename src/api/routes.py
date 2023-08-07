@@ -76,3 +76,19 @@ def protected():
         }
     
     return jsonify(logged_in_as=response_body), 200
+
+
+# ENDPOINT PARA VALIDAR TOKEN
+
+# @api.route("/validToken", methods=["GET"])
+# @jwt_required()
+# def protected():
+#     current_user = get_jwt_identity()
+#     print.log(current_user)
+
+#     response_body = {
+#         "logged_in_as": current_user.serialize()
+#     }
+#     print.log(response_body)
+
+#     return jsonify(response_body), 200
