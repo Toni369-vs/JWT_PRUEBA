@@ -90,6 +90,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 
+			// FUNCION PARA VALIDAR TOKEN
+
+			getProfile: async () => {
+				let token = localStorage.getItem("token")
+
+				try {
+					//codigo exitoso
+					let data = await axios.get("https://literate-space-succotash-v44q57gvx5wf7v-3001.app.github.dev/api/protected", {
+						headers: {
+							"Authorization": `Bearer ${token}`,
+						}
+					})
+
+					console.log(data);
+					setStore({ logged: true })
+					return true;
+
+				} catch (error) {
+					//manejar los errrores
+					console.log(error);
+					setStore({ logged: false })
+					return false;
+				}
+			},
+
+
+
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");

@@ -8,14 +8,21 @@ export const Private = () => {
   const { store, actions } = useContext(Context);
   let navigate = useNavigate();
 
-  const redirigir = () => {
-    
-    setTimeout(()=>{
-      navigate("/")
-    }, 5000)
-  }
-
   
+
+  useEffect(() => {
+    const getProfileData = async () => {
+      let logged = await actions.getProfile();
+      if (!logged) {
+        // Retraso de 3 segundos antes de navegar a "/register"
+        setTimeout(() => {
+          navigate("/register");
+        }, 5000);
+      }
+    };
+
+    getProfileData();
+  }, []);
   
 
   return (
@@ -32,8 +39,7 @@ export const Private = () => {
          (
           <div>
             <h1 className="text-center">Usuario no registrado</h1>
-            <p>Será redirigido a la página de login en 5 segundos</p>
-            {redirigir()}
+            <p>Será redirigido a la página de registro en 5 segundos</p>
           </div>
          )
       }
